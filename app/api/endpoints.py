@@ -17,3 +17,8 @@ async def upload_document(file: UploadFile = File(...)):
 @router.post("/query")
 async def ask_question(request: QueryRequest):
     return await query_rag(request.question)
+
+@router.get("/files")
+async def list_uploaded_files():
+    from app.services.store import list_files
+    return list_files()

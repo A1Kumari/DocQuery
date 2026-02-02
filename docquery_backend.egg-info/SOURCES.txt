@@ -1,0 +1,11 @@
+pyproject.toml
+app/main.py
+app/api/endpoints.py
+app/core/config.py
+app/services/ingestion.py
+app/services/rag.py
+docquery_backend.egg-info/PKG-INFO
+docquery_backend.egg-info/SOURCES.txt
+docquery_backend.egg-info/dependency_links.txt
+docquery_backend.egg-info/requires.txt
+docquery_backend.egg-info/top_level.txt

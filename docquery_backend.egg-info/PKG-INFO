@@ -1,0 +1,18 @@
+Metadata-Version: 2.4
+Name: docquery-backend
+Version: 0.1.0
+Summary: Backend for DocQuery RAG application
+Requires-Python: >=3.9
+Requires-Dist: fastapi
+Requires-Dist: uvicorn
+Requires-Dist: python-multipart
+Requires-Dist: pydantic-settings
+Requires-Dist: python-dotenv
+Requires-Dist: langchain>=0.3.0
+Requires-Dist: langchain-core>=0.3.0
+Requires-Dist: langchain-community>=0.3.0
+Requires-Dist: langchain-text-splitters>=0.3.0
+Requires-Dist: langchain-huggingface>=0.1.0
+Requires-Dist: langchain-pinecone>=0.2.0
+Requires-Dist: pinecone-client>=5.0.0
+Requires-Dist: sentence-transformers
