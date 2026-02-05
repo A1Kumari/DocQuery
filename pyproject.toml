@@ -13,6 +13,7 @@ requires-python = ">=3.9,<3.14"
 dependencies = [
     "fastapi",
     "uvicorn",
+    "gunicorn", 
     "python-multipart",
     "pydantic-settings",
     "python-dotenv",
