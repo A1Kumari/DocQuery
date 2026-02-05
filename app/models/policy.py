@@ -8,6 +8,11 @@ from app.models.enums import PolicyType, ClauseType
 # Sub-Models
 # ===================
 
+def generate_id(prefix: str = "") -> str:
+    """Generate unique ID with prefix."""
+    unique = uuid.uuid4().hex[:12]
+    return f"{prefix}_{unique}" if prefix else unique
+
 class Clause(BaseModel):
     """Individual clause extracted from policy."""
     clause_id: str = Field(..., description="Unique identifier for this clause")
@@ -108,7 +113,8 @@ class PolicyCreate(PolicyBase):
 
 class PolicyDocument(PolicyBase):
     """Complete policy with all extracted information."""
-    policy_id: str
+    policy_id: str = Field(default_factory=lambda: generate_id("pol"))  # THIS LINE
+    
     
     # Extracted structured data
     clauses: List[Clause] = Field(default_factory=list)
@@ -179,3 +185,4 @@ class PolicyGraphResponse(BaseModel):
     nodes: List[dict]
     edges: List[dict]
     statistics: dict
+

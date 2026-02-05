@@ -102,6 +102,45 @@ async def list_policies(
         policies=[]
     )
 
+
+@router.get("/test-storage")
+async def test_storage():
+    """Temporary endpoint to test policy storage."""
+    from app.storage.policy_store import get_policy_store
+    from app.models.policy import PolicyDocument, PolicyHolder
+    from app.models.enums import PolicyType
+    from datetime import date
+    
+    store = get_policy_store()
+    
+    # Create a test policy
+    test_policy = PolicyDocument(
+        policy_number="TEST-001",
+        policy_type=PolicyType.HEALTH,
+        holder=PolicyHolder(name="Test User", email="test@example.com"),
+        effective_date=date(2024, 1, 1),
+        expiration_date=date(2025, 1, 1),
+        raw_text="This is a test policy document.",
+        total_pages=1,
+        processing_status="completed"
+    )
+    
+    # Save it
+    saved = store.save(test_policy)
+    
+    # Retrieve it
+    retrieved = store.get(saved.policy_id)
+    
+    # Get stats
+    stats = store.get_statistics()
+    
+    return {
+        "saved_policy_id": saved.policy_id,
+        "retrieved": retrieved is not None,
+        "policy_number": retrieved.policy_number if retrieved else None,
+        "stats": stats
+    }
+    
 @router.get("/{policy_id}")
 async def get_policy(policy_id: str):
     """Get complete policy details including extracted information."""
@@ -171,3 +210,27 @@ async def delete_policy(policy_id: str):
         "success": True,
         "message": f"Policy {policy_id} deleted"
     }
+
+# ADD this at the end of app/api/v1/policies.py (temporary test)
+
+@router.post("/test-pdf-extraction")
+async def test_pdf_extraction(file: UploadFile = File(...)):
+    """Temporary endpoint to test PDF extraction."""
+    from app.utils.pdf import extract_text_from_pdf
+    
+    if not file.filename.endswith('.pdf'):
+        raise HTTPException(status_code=400, detail="Only PDF files supported")
+    
+    try:
+        text, page_count = await extract_text_from_pdf(file)
+        return {
+            "success": True,
+            "filename": file.filename,
+            "page_count": page_count,
+            "text_length": len(text),
+            "preview": text[:1000] + "..." if len(text) > 1000 else text
+        }
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ADD this temporary test endpoint at the end of policies.py

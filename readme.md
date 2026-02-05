@@ -1,5 +1,7 @@
  uvicorn app.main:app --reload
 
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
  .\venv\Scripts\Activate.ps1
 
  Ready to Build ClaimCheck?
@@ -49,3 +51,93 @@ ADMIN
 /api/v1/admin/health	GET	✅ Working	Health check
 /api/v1/admin/stats	GET	✅ Working	System stats
 /api/v1/admin/neo4j/status	GET	✅ Working	Neo4j status
+
+Data Storage Layer - We need actual persistent storage for:
+
+Policies (with extracted clauses, exclusions, coverage)
+Claims (with status, validation results)
+Documents metadata
+Policy Extraction - Real LLM-based extraction from PDFs:
+
+Extract clauses
+Extract exclusions
+Extract coverage limits
+Store in structured format + Neo4j graph
+Claim Validation - LangGraph workflow:
+
+Check policy coverage
+Check exclusions
+Run fraud detection
+Calculate payout
+Neo4j Integration - Graph database for:
+
+Policy relationships
+Clause dependencies
+Query complex relationships
+Let me create a proper production-level architecture:
+
+Phase 1: Storage Layer
+
+JSON-based stores for policies and claims (can upgrade to PostgreSQL later)
+Proper CRUD operations
+Data validation
+Phase 2: Policy Extractor Service
+
+PDF parsing
+LLM-based structured extraction
+Store to both JSON and vector DB
+Phase 3: Neo4j Integration
+
+Docker setup
+Client implementation
+Graph building
+Phase 4: Claim Validator (LangGraph)
+
+State management
+Validation workflow
+Fraud detection
+Let me start with a comprehensive production architecture.
+
+ClaimCheck - Production-Level Implementation
+Let's build this properly. Here's the complete production architecture:
+
+Architecture Overview
+text
+┌─────────────────────────────────────────────────────────────────────────────────────┐
+│                              PRODUCTION ARCHITECTURE                                 │
+├─────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                      │
+│  ┌─────────────┐     ┌──────────────────┐     ┌─────────────────┐                  │
+│  │   FastAPI   │────▶│  Service Layer   │────▶│  Storage Layer  │                  │
+│  │   Routes    │     │                  │     │                 │                  │
+│  └─────────────┘     │  • PolicyService │     │  • PolicyStore  │                  │
+│                      │  • ClaimService  │     │  • ClaimStore   │                  │
+│                      │  • ChatService   │     │  • Pinecone     │                  │
+│                      └──────────────────┘     │  • Neo4j        │                  │
+│                              │                └─────────────────┘                  │
+│                              ▼                                                      │
+│                      ┌──────────────────┐                                          │
+│                      │   AI Services    │                                          │
+│                      │                  │                                          │
+│                      │  • Extractor     │◀──── LLM (Groq/Google)                   │
+│                      │  • Validator     │◀──── LangGraph Agent                     │
+│                      │  • FraudDetector │◀──── Rule Engine + ML                    │
+│                      └──────────────────┘                                          │
+│                                                                                      │
+
+
+
+Policy Management (foundation - everything depends on policies)
+Models → Storage → Service → AI Extractor → Routes
+
+Document Processing (enhance existing)
+Already works, just connect to policy flow
+
+Claim Management (depends on policies)
+Models → Storage → Service → Routes
+
+Claim Validation (depends on claims + policies)
+AI Validator → Integration with claim service
+
+Dashboard (depends on all above)
+Aggregation of data from stores
