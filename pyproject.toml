@@ -7,7 +7,8 @@ name = "docquery-backend"
 version = "0.1.0"
 description = "Backend for DocQuery RAG application"
 
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.9,<3.14"
+
 
 dependencies = [
     "fastapi",
